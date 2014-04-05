@@ -66,18 +66,24 @@ public class BattleHackCreateDatabase extends HttpServlet {
             //System.out.println(conn.getClientInfo());
             Statement stat = conn.createStatement();
             stat.executeUpdate("drop table if exists people;");
-            stat.executeUpdate("create table people (name varchar(45), occupation varchar(45));");
+            stat.executeUpdate("create table people (email varchar(45), amount varchar(45));");
+            
             PreparedStatement prep = conn.prepareStatement("insert into people values (?,?);");
 
-            prep.setString(1, "Gandhi");
-            prep.setString(2, "politics");
+            prep.setString(1, "lnanek@gmail.com");
+            prep.setString(2, "10");
             prep.addBatch();
-            prep.setString(1, "Turing");
-            prep.setString(2, "computers");
+
+            prep.setString(1, "lnanek2@gmail.com");
+            prep.setString(2, "25");
             prep.addBatch();
+            
+            /*
+            
             prep.setString(1, "Wittgenstein");
             prep.setString(2, "smartypants");
             prep.addBatch();
+            */
 
             conn.setAutoCommit(false);
             prep.executeBatch();

@@ -9,7 +9,7 @@
 	
 	<h2>Anyone</h2>
 	<h3>Request a Payment</h3>
-	<form>
+	<form action="BattleHackRequestPayment" method="post">
 		Receive Money At: <input type="text" name="email" /><br />
 		
 		Amount: $<input type="text" name="amount" /><br />
@@ -19,7 +19,7 @@
 	
 	<h2>Google Glass User</h2>	
 	<h3>Approve Instant Payments for Later</h3>
-	<form>		
+	<form action="BattleHackPreapprovePayment" method="post">		
 		Amount Allowed: $<input type="text" name="amount" /><br />
 		
 		Number of Payments: $<input type="text" name="count" /><br />

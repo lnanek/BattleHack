@@ -1,4 +1,7 @@
 
+PayBeam - Instant payments with PayPal on Google Glass!
+https://2014.battlehack.org/teams/89
+
 Web page to request payment:
 	
 	Email: [    ]

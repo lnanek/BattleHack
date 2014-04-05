@@ -7,6 +7,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.paypal.exception.ClientActionRequiredException;
@@ -32,6 +36,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -39,53 +44,50 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BattleHackReadDatabase extends HttpServlet {
-
+public class BattleHackRequestPayment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public BattleHackReadDatabase() {
+	public BattleHackRequestPayment() {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request,
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-			
-			
-        response.setContentType("text/html;charset=UTF-8");
+
+		final String email = request.getParameter("email");
+		final String amount = request.getParameter("amount");
+				
+        response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
+        out.println("Adding values...");
+
+
         try {
-                
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Pay Beam - Instant PayPal Payments on Google Glass</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Pay Beam - Instant PayPal Payments on Google Glass</h1>");
-            
-            out.println("<h2>People waiting for payments:</h2>");
-            
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
-            Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery("select * from people;");
-            while (rs.next()) {
-                out.println("email = " + rs.getString("email") + "<br/>");
-                out.println("amount = " + rs.getString("amount") + "<br/>");
-            }
-            rs.close();
+            
+            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?);");
 
-            out.println("</body>");
-            out.println("</html>");
+            prep.setString(1, email);
+            prep.setString(2, amount);
+            prep.addBatch();
 
+            conn.setAutoCommit(false);
+            prep.executeBatch();
+            conn.setAutoCommit(true);
+
+            conn.close();
         } catch (SQLException ex) {
         	throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
         	throw new RuntimeException(ex);
-        } finally { 
-            out.close();
-        }			
-	
-	
+        }
+
+
+        out.println("Added.");
+        out.close();
+
+
 	}
 
 }
