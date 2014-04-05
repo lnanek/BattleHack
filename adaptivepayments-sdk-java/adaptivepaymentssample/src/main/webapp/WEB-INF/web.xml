@@ -12,6 +12,7 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	
 	<servlet>
 		<description></description>
 		<display-name>ConvertCurrencyServlet</display-name>
@@ -22,6 +23,32 @@
 		<servlet-name>ConvertCurrencyServlet</servlet-name>
 		<url-pattern>/ConvertCurrency</url-pattern>
 	</servlet-mapping>
+	
+	
+	<servlet>
+		<description></description>
+		<display-name>BattleHackCreateDatabase</display-name>
+		<servlet-name>BattleHackCreateDatabase</servlet-name>
+		<servlet-class>com.sample.adaptivepayments.BattleHackCreateDatabase</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BattleHackCreateDatabase</servlet-name>
+		<url-pattern>/BattleHackCreateDatabase</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<description></description>
+		<display-name>BattleHackReadDatabase</display-name>
+		<servlet-name>BattleHackReadDatabase</servlet-name>
+		<servlet-class>com.sample.adaptivepayments.BattleHackReadDatabase</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BattleHackReadDatabase</servlet-name>
+		<url-pattern>/BattleHackReadDatabase</url-pattern>
+	</servlet-mapping>		
+	
+	
 	<servlet>
 		<description></description>
 		<display-name>PayServlet</display-name>

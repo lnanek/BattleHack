@@ -1,0 +1,13 @@
+/*C2*/SET SCHEMA PUBLIC
+CONNECT USER SA
+drop table if exists people
+create table people (name varchar(45), occupation varchar(45))
+SET AUTOCOMMIT FALSE
+INSERT INTO PEOPLE VALUES('Gandhi','politics')
+INSERT INTO PEOPLE VALUES('Turing','computers')
+INSERT INTO PEOPLE VALUES('Wittgenstein','smartypants')
+COMMIT
+SET AUTOCOMMIT TRUE
+DISCONNECT
+/*C3*/SET SCHEMA PUBLIC
+CONNECT USER SA
