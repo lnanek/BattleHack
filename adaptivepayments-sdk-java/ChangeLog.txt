@@ -1,0 +1,108 @@
+Version 2.6.110 - March 04, 2014
+ 
+	- Updated stubs.
+	- Updated core version.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.6.110.
+--------------------------------------------------------------------------------------------------
+
+Version 2.5.106 - August 21, 2013
+ 
+	- Updated stubs.
+	- Updated samples to showcase dynamic configuration.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.4.103.
+--------------------------------------------------------------------------------------------------
+
+Version 2.4.103 - June 07, 2013
+ 
+	- Updated stubs for 103 release.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.4.103.
+--------------------------------------------------------------------------------------------------
+
+Version 2.3.101 - April 30, 2013
+ 
+	- Updated stubs for 101 release.
+	- Updated core sdk version.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.3.101.
+--------------------------------------------------------------------------------------------------
+
+Version 2.3.100 - March 25, 2013
+ 
+	- Updated stubs for 100 release
+	- Added dynamic configuration support by passing configuration parameters using hash map.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.3.100.
+--------------------------------------------------------------------------------------------------
+
+Version 2.2.98 - February 05, 2013
+ 
+	- Updated sandbox ipn endpoint in sample.
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.2.98.
+--------------------------------------------------------------------------------------------------
+
+Version 2.1.96 - December 14, 2012
+ 
+	- Added support for Instant Payment Notification (Refer IPN-README.md for more details)
+	- Added new feature for supporting multiple endpoints based on portname for using different sdks together.
+	- Added new feature in which that service wrapper class have constructor that takes java.util.Properties (https://github.com/paypal/merchant-sdk-java/issues/2)
+	- Fixes for serialization issue (https://github.com/paypal/merchant-sdk-java/issues/1)   
+	
+You can see source code of this release in github under https://github.com/paypal/adaptivepayments-sdk-java/tree/v2.1.96.
+--------------------------------------------------------------------------------------------------
+
+
+Version 2.0.96 - November 28, 2012
+ 
+	- SDK refreshed to Release 96
+    - Added Maven support for SDK core, SDK and Samples projects
+    - Added support for passing in credentials dynamically for Authentication, now the call 
+      wrappers have an argument for passing credentials
+    - New type ThirdPartyAuthorization has been added to support Subject and Token based Authorizations. The earlier
+      setAccessToken and setTokenSecret have been deprecated. You can set an instance of ThirdPartyAuthorization to an 
+      ICredntial and pass ICredential as a parameter to  API call 
+    - Java code Refactoring bug fixed (refer : https://github.com/paypal/SDKs/issues/34)    
+--------------------------------------------------------------------------------------------------
+
+
+Version 1.2.95 - September 28, 2012
+ 
+	- Updated SDK sample
+--------------------------------------------------------------------------------------------------
+
+
+Version 1.1.93 - August 13, 2012
+ 
+	- SDK refreshed to Release 1.8.1. Please refer https://www.x.com/developers/paypal/documentation-tools/release-notes#AdaptivePaymentsAPI
+	- SDK Core - Deserialization Logic Change
+--------------------------------------------------------------------------------------------------
+
+
+Version 1.0.92 - July 30, 2012
+ 
+	- Stable release
+--------------------------------------------------------------------------------------------------
+
+
+
+
+Version 0.8.92 - July 17, 2012 
+    - wsdl update version 0.8.92
+----------------------------------
+	
+Version 0.8.88 - July 05, 2012
+   - This release contains minor fixes for incorrect proxy configuration parsing and issues with 
+    using the paypal_auth_signature jar in jre 1.5
+----------------------------------
+
+Version 0.7.88 - March 11, 2012
+  - This release contains wsdl changes for version 88.0
+  - Fix for incorrect Permissions header (X-PP-AUTHORIZATION)
+
+-----------------------------------
+
+Version 0.6.86 - February 27, 2012
+ - This release contains new AdaptivePayments SDK (NVP) and samples for AdaptivePayments api's.
