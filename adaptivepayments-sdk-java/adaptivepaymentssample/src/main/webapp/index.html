@@ -1,12 +1,68 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Pay Beam - Instant PayPal Payments on Google Glass</title>
+<meta charset="utf-8">
+<title>PayBeam - Instant PayPal Payments on Google Glass</title>
+<style>
+	body{
+		font-family: "Arial", sans-serif;
+		margin: 0;
+		padding: 0;
+		background-color: #fff;
+	}
+	.main{
+		width: 1160px;
+		margin: 0 auto;
+	}
+	.hero h1{
+		font-size: 4em;
+		margin-top: 0;
+		padding-top: 180px;
+		font-style: italic;
+
+	}
+	.hero h2{
+		font-size: 3em;
+	}
+	div.hero{
+		height: 380px;
+		width: 100%;
+		color: #ffffff;
+		background-color: #458FDA;
+	}
+	.left{
+		display: inline-block;
+		width:48%;
+		/*float:left;*/
+	}
+	.right{
+		display: inline-block;
+		width:48%;
+	}
+	input{
+		line-height: 2em;
+		width: 90%;
+		border-radius: 4px;
+		font-size: 1.5em;
+
+	}
+	button{
+
+	}
+	footer .main{
+		text-align: center;
+		margin: 2em;
+	}
+</style>
 </head>
 <body>
-	<h1>Pay Beam - Instant PayPal Payments on Google Glass</h1>
-	
+<div class="hero">
+<div class="main">
+	<h1>PayBeam</h1><h2>Instant PayPal Payments on Google Glass</h2>
+	</div>
+	</div>
+	<div class="main">
+	<div class="left">
 	<h2>Anyone</h2>
 	<h3>Request a Payment</h3>
 	<form action="BattleHackRequestPayment" method="post">
@@ -16,7 +72,8 @@
 		
 		<input type="submit" value="Make Request" />
 	</form>
-	
+	</div>
+	<div class="right">
 	<h2>Google Glass User</h2>	
 	<h3>Approve Instant Payments for Later</h3>
 	<form action="BattleHackPreapprovePayment" method="post">		
@@ -26,7 +83,13 @@
 		
 		<input type="submit" value="Pre-Approve Amount" />
 	</form>
-	
+	</div>
+</div>
+<footer>
+<div class="main">
+Built for BattleHack 2014 San Francisco, CA
+</div>
+</footer>
    
 </body>
 </html>
