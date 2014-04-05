@@ -30,6 +30,10 @@ Glass app:
 	
 *** Extra
 
+	HTML5 location sorting to show nearest first
+	
+	payments to people in contacts list without them requesting
+
 	Web page to send payment to people near you
 
 	Glass command to request payment from people near you
