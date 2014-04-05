@@ -44,39 +44,45 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class BattleHackReadDatabase extends HttpServlet {
+public class BattleHackDisplayDatabase extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	public BattleHackReadDatabase() {
+	public BattleHackDisplayDatabase() {
 		super();
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-						
-        response.setContentType("application/json;charset=UTF-8");
+			
+			
+        response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-                            
+                
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Pay Beam - Instant PayPal Payments on Google Glass</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Pay Beam - Instant PayPal Payments on Google Glass</h1>");
+            
+            out.println("<h2>People waiting for payments:</h2>");
+            
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
             Statement stat = conn.createStatement();
             ResultSet rs = stat.executeQuery("select * from people;");
             
-            final List<Map<String,String>> results = new LinkedList<Map<String, String>>();
             while (rs.next()) {
-            	final Map<String, String> row = new HashMap<String, String>();
-            	row.put("email", rs.getString("email"));
-            	row.put("amount", rs.getString("amount"));
-            	results.add(row);
+                out.println("email = " + rs.getString("email") + "<br/>");
+                out.println("amount = " + rs.getString("amount") + "<br/>");
             }
             rs.close();
-            
-            final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            final String json = gson.toJson(results);
-            out.println(json);
-            
+                                
+            out.println("</body>");
+            out.println("</html>");
+
         } catch (SQLException ex) {
         	throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
