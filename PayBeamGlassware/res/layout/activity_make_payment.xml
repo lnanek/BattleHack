@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="name.nanek.paybeam.MakePaymentActivity"
+    tools:ignore="MergeRootFrame" 
+    >
+    
+    <TextView
+        android:id="@+id/text"
+        android:text="Hello World"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"        
+        />
+    
+</FrameLayout>
