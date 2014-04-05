@@ -1,0 +1,35 @@
+
+Web page to request payment:
+	
+	Email: [    ]
+	Amount requested: [    ]
+	[ Submit ] -> ( Shows up on Google Glass app as person can pay to)
+
+
+
+Web page to pre-approve payment:
+
+	Amount approved: [    ]
+	Number of payments: [    ]
+	Time span: [     ]
+	[ Submit ] -> (PayPal sign up, allows you to pay instantly on Glass without typing pin/signing in)
+	
+
+	
+Glass app:
+
+	Ok Glass...
+	Make Payment
+	
+	Swipe between people who have submitted waiting for payment:
+	[  Chloe - $10  ]
+	[  Starbucks $8.99 ]
+	
+	Tap to pay
+	
+	
+*** Extra
+
+	Web page to send payment to people near you
+
+	Glass command to request payment from people near you
