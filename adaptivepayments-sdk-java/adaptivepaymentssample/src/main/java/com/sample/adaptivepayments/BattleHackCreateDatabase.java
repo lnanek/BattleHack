@@ -29,6 +29,7 @@ import com.paypal.svcs.types.ap.CurrencyList;
 import com.paypal.svcs.types.common.CurrencyType;
 import com.paypal.svcs.types.common.RequestEnvelope;
 import com.sample.util.Configuration;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -37,8 +38,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -72,21 +75,23 @@ public class BattleHackCreateDatabase extends HttpServlet {
             
             Statement stat = conn.createStatement();
             stat.executeUpdate("drop table if exists people;");
-            stat.executeUpdate("create table people (email varchar(45), amount varchar(45), status varchar(45));");
+            stat.executeUpdate("create table people (email varchar(45), amount varchar(45), status varchar(45), request_id INT IDENTITY);");
 
             stat.executeUpdate("drop table if exists approvals;");
             stat.executeUpdate("create table approvals (email varchar(45), preapprovalKey varchar(45));");
 
-            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?);");
+            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?,?);");
 
             prep.setString(1, "lnanek@gmail.com");
             prep.setString(2, "10");
             prep.setString(3, "PENDING");
+            prep.setNull(4, Types.INTEGER);
             prep.addBatch();
 
             prep.setString(1, "lnanek2@gmail.com");
             prep.setString(2, "25");
             prep.setString(3, "PENDING");
+            prep.setNull(4, Types.INTEGER);
             prep.addBatch();
             
             conn.setAutoCommit(false);

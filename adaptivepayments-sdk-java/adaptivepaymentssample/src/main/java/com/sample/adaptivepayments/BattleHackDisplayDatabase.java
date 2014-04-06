@@ -75,6 +75,7 @@ public class BattleHackDisplayDatabase extends HttpServlet {
             ResultSet rs = stat.executeQuery("select * from people;");
             
             while (rs.next()) {
+                out.println("request_id = " + rs.getString("request_id") + "<br/>");
                 out.println("email = " + rs.getString("email") + "<br/>");
                 out.println("amount = " + rs.getString("amount") + "<br/>");
                 out.println("status = " + rs.getString("status") + "<br/>");

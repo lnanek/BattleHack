@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -56,16 +57,39 @@ public class BattleHackPaymentStatus extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-			
-		final String requestId = request.getParameter("requestId");
 
-		
-		// TODO check status of payment vs. DB row ID parameter
+		final String requestId = request.getParameter("requestId");
+		final int requestIdParsed = Integer.parseInt(requestId);
+
+		response.setContentType("text/plain");
+		PrintWriter out = response.getWriter();
+		out.println("\n\nChecking payment status...");
+
+		try {
+
+			Class.forName("org.hsqldb.jdbcDriver");
+			Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
+
+			PreparedStatement prep = conn.prepareStatement(
+					"select * from people where request_id = ?;");
+			prep.setInt(1, requestIdParsed);
+
+			ResultSet rs = prep.executeQuery();
+			rs.next();
+			final String status = rs.getString("status");
+
+			rs.close();
+
+			out.println("\n\nStatus is: " + status);
+
+		} catch (SQLException ex) {
+			throw new RuntimeException(ex);
+		} catch (ClassNotFoundException ex) {
+			throw new RuntimeException(ex);
+		}
+
 		// TODO auto-refresh
-		
-			
-	
-	
+
 	}
 
 }

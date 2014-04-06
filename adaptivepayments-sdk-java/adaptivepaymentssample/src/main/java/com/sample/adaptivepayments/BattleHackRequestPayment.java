@@ -29,6 +29,7 @@ import com.paypal.svcs.types.ap.CurrencyList;
 import com.paypal.svcs.types.common.CurrencyType;
 import com.paypal.svcs.types.common.RequestEnvelope;
 import com.sample.util.Configuration;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -37,8 +38,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -59,23 +62,36 @@ public class BattleHackRequestPayment extends HttpServlet {
 				
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
-        out.println("Adding values...");
-
+        out.println("\n\nAdding payment request...");
 
         try {
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
             
-            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?);");
-
+            // Remove any previous request for this email.
+            String deleteSQL = "delete from people where email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(deleteSQL);
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+            
+            // Insert the new request for payment.
+            PreparedStatement prep = conn.prepareStatement(
+            		"insert into people values (?,?,?,?);");
             prep.setString(1, email);
             prep.setString(2, amount);
             prep.setString(3, "PENDING");
-            prep.addBatch();
+            prep.setNull(4, Types.INTEGER);
+            prep.executeUpdate();
 
-            conn.setAutoCommit(false);
-            prep.executeBatch();
-            conn.setAutoCommit(true);
+            // Get the ID so we can check on the status.
+            PreparedStatement prep2 = conn.prepareStatement("CALL IDENTITY()");
+            ResultSet generatedKeys = prep2.executeQuery();
+            if (null != generatedKeys && generatedKeys.next()) {
+                 Long primaryKey = generatedKeys.getLong(1);
+                 out.println("\n\nRequest number " + primaryKey + " added!");
+            }
+
+            // TODO redirect to payment status page
 
             conn.close();
         } catch (SQLException ex) {
@@ -84,12 +100,9 @@ public class BattleHackRequestPayment extends HttpServlet {
         	throw new RuntimeException(ex);
         }
 
-        // TODO get DB row ID and redirect to payment status page
 
-        out.println("Added.");
+        out.println("\n\nGoogle Glass can now complete the payment.");
         out.close();
-
-
 	}
 
 }
