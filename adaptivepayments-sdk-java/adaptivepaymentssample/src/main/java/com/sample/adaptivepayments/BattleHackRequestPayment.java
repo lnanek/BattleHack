@@ -60,9 +60,6 @@ public class BattleHackRequestPayment extends HttpServlet {
 		final String email = request.getParameter("email");
 		final String amount = request.getParameter("amount");
 				
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
-        out.println("\n\nAdding payment request...");
 
         try {
             Class.forName("org.hsqldb.jdbcDriver");
@@ -88,21 +85,21 @@ public class BattleHackRequestPayment extends HttpServlet {
             ResultSet generatedKeys = prep2.executeQuery();
             if (null != generatedKeys && generatedKeys.next()) {
                  Long primaryKey = generatedKeys.getLong(1);
-                 out.println("\n\nRequest number " + primaryKey + " added!");
+                 
+                 //out.println("\n\nRequest number " + primaryKey + " added!");
+                 
+                 response.sendRedirect("BattleHackPaymentStatus?requestId=" + primaryKey);
             }
 
-            // TODO redirect to payment status page
-
             conn.close();
+            return;
+            
         } catch (SQLException ex) {
         	throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
         	throw new RuntimeException(ex);
         }
 
-
-        out.println("\n\nGoogle Glass can now complete the payment.");
-        out.close();
 	}
 
 }

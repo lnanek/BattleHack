@@ -10,57 +10,7 @@
 <head>
 <meta charset="utf-8">
 <title>PayBeam - Instant PayPal Payments on Google Glass</title>
-<style>
-	body{
-		font-family: "Arial", sans-serif;
-		margin: 0;
-		padding: 0;
-		background-color: #fff;
-	}
-	.main{
-		width: 1160px;
-		margin: 0 auto;
-	}
-	.hero h1{
-		font-size: 4em;
-		margin-top: 0;
-		padding-top: 180px;
-		font-style: italic;
-
-	}
-	.hero h2{
-		font-size: 3em;
-	}
-	div.hero{
-		height: 380px;
-		width: 100%;
-		color: #ffffff;
-		background-color: #458FDA;
-	}
-	.left{
-		display: inline-block;
-		width:48%;
-		/*float:left;*/
-	}
-	.right{
-		display: inline-block;
-		width:48%;
-	}
-	input{
-		line-height: 2em;
-		width: 90%;
-		border-radius: 4px;
-		font-size: 1.5em;
-
-	}
-	button{
-
-	}
-	footer .main{
-		text-align: center;
-		margin: 2em;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="theme.css">
 </head>
 <body>
 <div class="hero">

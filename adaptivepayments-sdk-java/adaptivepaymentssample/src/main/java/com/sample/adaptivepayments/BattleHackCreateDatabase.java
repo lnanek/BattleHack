@@ -82,11 +82,11 @@ public class BattleHackCreateDatabase extends HttpServlet {
 
             PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?,?);");
 
-            prep.setString(1, "lnanek@gmail.com");
-            prep.setString(2, "10");
-            prep.setString(3, "PENDING");
-            prep.setNull(4, Types.INTEGER);
-            prep.addBatch();
+            //prep.setString(1, "lnanek@gmail.com");
+            //prep.setString(2, "10");
+            //prep.setString(3, "PENDING");
+            //prep.setNull(4, Types.INTEGER);
+            //prep.addBatch();
 
             prep.setString(1, "lnanek2@gmail.com");
             prep.setString(2, "25");

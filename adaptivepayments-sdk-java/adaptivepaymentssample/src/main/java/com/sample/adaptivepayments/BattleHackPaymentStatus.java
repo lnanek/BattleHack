@@ -61,9 +61,11 @@ public class BattleHackPaymentStatus extends HttpServlet {
 		final String requestId = request.getParameter("requestId");
 		final int requestIdParsed = Integer.parseInt(requestId);
 
-		response.setContentType("text/plain");
-		PrintWriter out = response.getWriter();
-		out.println("\n\nChecking payment status...");
+		//response.setContentType("text/plain");
+		//PrintWriter out = response.getWriter();
+		//out.println("\n\nPayment requested!...");
+
+		//out.println("\n\nChecking status...");
 
 		try {
 
@@ -80,7 +82,14 @@ public class BattleHackPaymentStatus extends HttpServlet {
 
 			rs.close();
 
-			out.println("\n\nStatus is: " + status);
+			//out.println("\n\nStatus is: " + status);
+			
+			request.setAttribute("status", status);
+			
+			getServletConfig().getServletContext().getRequestDispatcher("/status.jsp")
+			.forward(request, response);
+
+			conn.close();
 
 		} catch (SQLException ex) {
 			throw new RuntimeException(ex);
