@@ -66,10 +66,11 @@ public class BattleHackRequestPayment extends HttpServlet {
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
             
-            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?);");
+            PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?);");
 
             prep.setString(1, email);
             prep.setString(2, amount);
+            prep.setString(3, "PENDING");
             prep.addBatch();
 
             conn.setAutoCommit(false);

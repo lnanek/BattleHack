@@ -69,6 +69,7 @@ public class BattleHackReadDatabase extends HttpServlet {
             	final Map<String, String> row = new HashMap<String, String>();
             	row.put("email", rs.getString("email"));
             	row.put("amount", rs.getString("amount"));
+            	row.put("status", rs.getString("status"));
             	results.add(row);
             }
             rs.close();

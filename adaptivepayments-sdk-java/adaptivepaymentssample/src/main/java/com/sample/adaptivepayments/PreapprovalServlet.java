@@ -1,6 +1,10 @@
 package com.sample.adaptivepayments;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -124,17 +128,17 @@ public class PreapprovalServlet extends HttpServlet {
 			req.setDayOfWeek(DayOfWeek.fromValue(request.getParameter("dayOfWeek")));
 		/**
 		 * (Optional) Whether to display the maximum total amount of this preapproval. It is one of the following values:
-			   TRUE – Display the amount
-			   FALSE – Do not display the amount (default)
+			   TRUE ï¿½ Display the amount
+			   FALSE ï¿½ Do not display the amount (default)
 		 */
 		if (request.getParameter("displayMaxTotalAmount") != "")
 			req.setDisplayMaxTotalAmount(Boolean.parseBoolean(request.getParameter("displayMaxTotalAmount")));
 		/**
 		 * (Optional) The payer of PayPal fees. Allowable values are:
-		    SENDER – Sender pays all fees (for personal, implicit simple/parallel payments; do not use for chained or unilateral payments)
-		    PRIMARYRECEIVER – Primary receiver pays all fees (chained payments only)
-		    EACHRECEIVER – Each receiver pays their own fee (default, personal and unilateral payments)
-		    SECONDARYONLY – Secondary receivers pay all fees (use only for chained payments with one secondary receiver)
+		    SENDER ï¿½ Sender pays all fees (for personal, implicit simple/parallel payments; do not use for chained or unilateral payments)
+		    PRIMARYRECEIVER ï¿½ Primary receiver pays all fees (chained payments only)
+		    EACHRECEIVER ï¿½ Each receiver pays their own fee (default, personal and unilateral payments)
+		    SECONDARYONLY ï¿½ Secondary receivers pay all fees (use only for chained payments with one secondary receiver)
 		 */
 		if (request.getParameter("feesPayer") != "")
 			req.setFeesPayer(request.getParameter("feesPayer"));
@@ -180,19 +184,19 @@ public class PreapprovalServlet extends HttpServlet {
 		/**
 		 * (Optional) The payment period. It is one of the following values:
 		    NO_PERIOD_SPECIFIED
-		    DAILY – Each day
-		    WEEKLY – Each week
-		    BIWEEKLY – Every other week
-		    SEMIMONTHLY – Twice a month
-		    MONTHLY – Each month
-		    ANNUALLY – Each year
+		    DAILY ï¿½ Each day
+		    WEEKLY ï¿½ Each week
+		    BIWEEKLY ï¿½ Every other week
+		    SEMIMONTHLY ï¿½ Twice a month
+		    MONTHLY ï¿½ Each month
+		    ANNUALLY ï¿½ Each year
 		 */
 		if (request.getParameter("paymentPeriod") != "")
 			req.setPaymentPeriod(request.getParameter("paymentPeriod"));
 		/**
 		 * (Optional) Whether a personal identification number (PIN) is required. It is one of the following values:
-		    NOT_REQUIRED – A PIN is not required (default)
-		    REQUIRED – A PIN is required; the sender must specify a PIN when setting up the preapproval on PayPal
+		    NOT_REQUIRED ï¿½ A PIN is not required (default)
+		    REQUIRED ï¿½ A PIN is required; the sender must specify a PIN when setting up the preapproval on PayPal
 		 */
 		if (request.getParameter("pinType") != "")
 			req.setPinType(request.getParameter("pinType"));
@@ -278,6 +282,11 @@ public class PreapprovalServlet extends HttpServlet {
 									+ ">Redirect to paypal</a>");
 					session.setAttribute("map", map);
 					response.sendRedirect("Response.jsp");
+					
+					
+					addPreapproval(request.getParameter("senderEmail"), resp.getPreapprovalKey());
+					
+					
 				} else {
 					session.setAttribute("Error", resp.getError());
 					response.sendRedirect("Error.jsp");
@@ -308,5 +317,32 @@ public class PreapprovalServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private static void addPreapproval(final String email, final String key) {
+		
+
+        try {
+            Class.forName("org.hsqldb.jdbcDriver");
+            Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
+            
+            PreparedStatement prep = conn.prepareStatement("insert into approvals values (?,?);");
+
+            prep.setString(1, email);
+            prep.setString(2, key);
+            prep.addBatch();
+
+            conn.setAutoCommit(false);
+            prep.executeBatch();
+            conn.setAutoCommit(true);
+
+            conn.close();
+        } catch (SQLException ex) {
+        	throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+        	throw new RuntimeException(ex);
+        }		
+		
+		
 	}
 }

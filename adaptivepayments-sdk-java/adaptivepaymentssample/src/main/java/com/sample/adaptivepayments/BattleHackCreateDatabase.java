@@ -74,26 +74,27 @@ public class BattleHackCreateDatabase extends HttpServlet {
 
             prep.setString(1, "lnanek@gmail.com");
             prep.setString(2, "10");
-            prep.setString(2, "PENDING");
+            prep.setString(3, "PENDING");
             prep.addBatch();
 
             prep.setString(1, "lnanek2@gmail.com");
             prep.setString(2, "25");
-            prep.setString(2, "PENDING");
+            prep.setString(3, "PENDING");
             prep.addBatch();
             
             conn.setAutoCommit(false);
             prep.executeBatch();
             conn.setAutoCommit(true);
 
-            conn.close();
 
             
         
             stat.executeUpdate("drop table if exists approvals;");
             stat.executeUpdate("create table approvals (email varchar(45), preapprovalKey varchar(45));");
       
-        
+
+            conn.close();
+
         
         
         } catch (SQLException ex) {
