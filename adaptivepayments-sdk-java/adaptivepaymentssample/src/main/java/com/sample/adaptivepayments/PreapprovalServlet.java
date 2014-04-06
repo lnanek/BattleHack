@@ -284,7 +284,12 @@ public class PreapprovalServlet extends HttpServlet {
 					response.sendRedirect("Response.jsp");
 					
 					
-					addPreapproval(request.getParameter("senderEmail"), resp.getPreapprovalKey());
+					final String reqEmail = req.getSenderEmail();
+					final String reqSenderEmail = null != req.getSender() ? req.getSender().getEmail() : null;
+					final String dbEmail = null != reqSenderEmail && !"".equals(reqSenderEmail) ? 
+							reqSenderEmail : reqEmail;
+					
+					addPreapproval(dbEmail, resp.getPreapprovalKey());
 					
 					
 				} else {
