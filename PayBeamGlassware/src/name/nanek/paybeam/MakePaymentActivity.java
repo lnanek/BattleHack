@@ -39,6 +39,7 @@ public class MakePaymentActivity extends Activity {
 
 	private static final String LOG_TAG = "MakePaymentActivity";
 
+	// TODO deploy to heroku, change base URL
 	private static final String SERVER = "http://10.0.2.2:9091/adaptivepaymentssample/";
 
 	private static final String DOWNLOAD_URL = SERVER + "BattleHackReadDatabase";
@@ -74,6 +75,7 @@ public class MakePaymentActivity extends Activity {
 
 		StrictMode.setThreadPolicy(policy);
 
+		// TODO use card views for more Glass like experience
 		setContentView(R.layout.activity_make_payment);
 
 		text = (TextView) findViewById(R.id.text);
@@ -138,7 +140,7 @@ public class MakePaymentActivity extends Activity {
 		}
 	}
 	
-	public void completePayment(final String recipient, final String username) {
+	public void completePayment(final String recipient, final String username, final String amount) {
 
 		Log.i(LOG_TAG, "completePayment");
 
@@ -148,7 +150,10 @@ public class MakePaymentActivity extends Activity {
 		HttpClient client = new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost(SUBMIT_URL
 				+ "?recipient=" + recipient
-				+ "&username=" + username);
+				+ "&username=" + username
+				+ "&amount=" + amount
+				
+				);
 		try {
 			HttpResponse response = client.execute(httpPost);
 			StatusLine statusLine = response.getStatusLine();
@@ -159,6 +164,7 @@ public class MakePaymentActivity extends Activity {
 				final Message message = handler.obtainMessage(MSG_ID_ERROR, "Payment complete");
 				handler.sendMessage(message);
 
+				// TODO complete sound, OK icon
 
 			} else {
 				final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to complete");
@@ -202,7 +208,7 @@ public class MakePaymentActivity extends Activity {
 			@Override
 			public void run() {
 				// TODO lookup email from Google Glass account
-				completePayment(recipient.email, "lnanek@gmail.com");
+				completePayment(recipient.email, "lnanek@gmail.com", recipient.amount);
 			}
 		};
 		thread.start();

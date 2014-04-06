@@ -276,6 +276,10 @@ public class PreapprovalServlet extends HttpServlet {
 					
 					/** A preapproval key that identifies the preapproval requested */
 					map.put("Preapproval Key", resp.getPreapprovalKey());
+					
+					
+					// TODO auto-redirect to PayPal for approval
+					
 					map.put("Redirect URL",
 							"<a href=https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-preapproval&preapprovalkey="
 									+ resp.getPreapprovalKey()

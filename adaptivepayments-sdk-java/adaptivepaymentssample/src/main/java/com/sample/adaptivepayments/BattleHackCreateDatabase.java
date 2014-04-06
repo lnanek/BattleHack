@@ -69,7 +69,10 @@ public class BattleHackCreateDatabase extends HttpServlet {
             Statement stat = conn.createStatement();
             stat.executeUpdate("drop table if exists people;");
             stat.executeUpdate("create table people (email varchar(45), amount varchar(45), status varchar(45));");
-            
+
+            stat.executeUpdate("drop table if exists approvals;");
+            stat.executeUpdate("create table approvals (email varchar(45), preapprovalKey varchar(45));");
+
             PreparedStatement prep = conn.prepareStatement("insert into people values (?,?,?);");
 
             prep.setString(1, "lnanek@gmail.com");
@@ -85,17 +88,8 @@ public class BattleHackCreateDatabase extends HttpServlet {
             conn.setAutoCommit(false);
             prep.executeBatch();
             conn.setAutoCommit(true);
-
-
             
-        
-            stat.executeUpdate("drop table if exists approvals;");
-            stat.executeUpdate("create table approvals (email varchar(45), preapprovalKey varchar(45));");
-      
-
             conn.close();
-
-        
         
         } catch (SQLException ex) {
         	throw new RuntimeException(ex);
