@@ -63,7 +63,9 @@ public class BattleHackCreateDatabase extends HttpServlet {
         try {
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
-            //System.out.println(conn.getClientInfo());
+
+
+            
             Statement stat = conn.createStatement();
             stat.executeUpdate("drop table if exists people;");
             stat.executeUpdate("create table people (email varchar(45), amount varchar(45));");
@@ -78,18 +80,20 @@ public class BattleHackCreateDatabase extends HttpServlet {
             prep.setString(2, "25");
             prep.addBatch();
             
-            /*
-            
-            prep.setString(1, "Wittgenstein");
-            prep.setString(2, "smartypants");
-            prep.addBatch();
-            */
-
             conn.setAutoCommit(false);
             prep.executeBatch();
             conn.setAutoCommit(true);
 
             conn.close();
+
+            
+        
+            stat.executeUpdate("drop table if exists approvals;");
+            stat.executeUpdate("create table approvals (email varchar(45), preapprovalKey varchar(45));");
+      
+        
+        
+        
         } catch (SQLException ex) {
         	throw new RuntimeException(ex);
         } catch (ClassNotFoundException ex) {
