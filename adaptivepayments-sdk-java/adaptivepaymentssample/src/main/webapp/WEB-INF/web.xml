@@ -53,6 +53,18 @@
 	
 	<servlet>
 		<description></description>
+		<display-name>BattleHackCompletePayment</display-name>
+		<servlet-name>BattleHackCompletePayment</servlet-name>
+		<servlet-class>com.sample.adaptivepayments.BattleHackCompletePayment</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BattleHackCompletePayment</servlet-name>
+		<url-pattern>/BattleHackCompletePayment</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<description></description>
 		<display-name>BattleHackReadDatabase</display-name>
 		<servlet-name>BattleHackReadDatabase</servlet-name>
 		<servlet-class>com.sample.adaptivepayments.BattleHackReadDatabase</servlet-class>
