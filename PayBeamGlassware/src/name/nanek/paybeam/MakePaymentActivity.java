@@ -39,8 +39,11 @@ public class MakePaymentActivity extends Activity {
 
 	private static final String LOG_TAG = "MakePaymentActivity";
 
-	// TODO deploy to heroku, change base URL
-	private static final String SERVER = "http://10.0.2.2:9091/adaptivepaymentssample/";
+	private static final String LOCAL_SERVER = "http://10.0.2.2:9091/adaptivepaymentssample/";
+
+	private static final String HEROKU_SERVER = "http://paybeam.herokuapp.com/";
+	
+	private static final String SERVER = HEROKU_SERVER;
 
 	private static final String DOWNLOAD_URL = SERVER + "BattleHackReadDatabase";
 	
@@ -51,12 +54,33 @@ public class MakePaymentActivity extends Activity {
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			recipients = (List<Recipient>) msg.obj;
-			progress.hide();
-			
-			text.setText(recipients.toString());
+			Log.i(LOG_TAG, "handleMessage");
 
-			openOptionsMenu();
+			if ( null != progress && progress.isShowing() ) {
+				progress.hide();
+			}
+			
+			if ( MSG_ID_GOT_RECIPIENTS == msg.what ) {
+
+				Log.i(LOG_TAG, "updating recipients");
+				
+				recipients = (List<Recipient>) msg.obj;
+				
+				text.setText(recipients.toString());
+				
+				invalidateOptionsMenu();
+				
+				openOptionsMenu();
+				
+				return;
+
+			} else {
+
+				Log.i(LOG_TAG, "updating text");
+
+				final String message = (String) msg.obj;
+				text.setText(message);
+			}
 		}
 	};
 
@@ -70,10 +94,11 @@ public class MakePaymentActivity extends Activity {
 		Log.i(LOG_TAG, "onCreate");
 
 		super.onCreate(savedInstanceState);
+		
+		// TODO read voice prompt input, search address book for user, do payment to them
 
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-		StrictMode.setThreadPolicy(policy);
+		//StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		//StrictMode.setThreadPolicy(policy);
 
 		// TODO use card views for more Glass like experience
 		setContentView(R.layout.activity_make_payment);
@@ -115,13 +140,16 @@ public class MakePaymentActivity extends Activity {
 					builder.append(line);
 				}
 
-				Gson gson = new Gson();
-				Type collectionType = new TypeToken<List<Recipient>>() {
-				}.getType();				
-				final List<Recipient> recipients = gson.fromJson(builder.toString(), collectionType);
-				Log.d(LOG_TAG, "List: " + recipients);
+				Log.d(LOG_TAG, "Downloaded JSON: " + builder.toString());
 
-				final Message message = handler.obtainMessage(MSG_ID_GOT_RECIPIENTS, recipients);
+				
+				Gson gson = new Gson();				
+				Type collectionType = new TypeToken<LinkedList<Recipient>>() {}.getType();								
+				final List<Recipient> downloadedRecipients = gson.fromJson(builder.toString(), collectionType);
+				Log.d(LOG_TAG, "List: " + downloadedRecipients);
+
+				final Message message = handler.obtainMessage(
+						MSG_ID_GOT_RECIPIENTS, downloadedRecipients);
 				handler.sendMessage(message);
 
 
@@ -183,14 +211,27 @@ public class MakePaymentActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		Log.i(LOG_TAG, "onCreateOptionsMenu");
+		return true;
+	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		Log.i(LOG_TAG, "onPrepareOptionsMenu");
 		
+		menu.clear();
+
+		Log.i(LOG_TAG, "recipients.size = " + recipients.size());
+
 		for(int index = 0; index < recipients.size(); index++) {
 			final Recipient recipient = recipients.get(index);
-
 			final int menuItemId = index;
-			menu.add(0, menuItemId, 0, recipient.email + " - $" + recipient.amount);						
+			
+			final String menuTitle = recipient.email + " - $" + recipient.amount;
+			menu.add(0, menuItemId, 0, menuTitle);	
+			
+
+			Log.i(LOG_TAG, "adding menu item: " + menuTitle);
 		}
 
 		return true;
@@ -204,11 +245,14 @@ public class MakePaymentActivity extends Activity {
 		final Recipient recipient = recipients.get(item.getItemId());
 		text.setText("Selected = " + recipient.email);
 		
+		//final String username = DeviceEmail.get(this);
+		final String username = "lnanek@gmail.com";
+		
+		progress.show();
 		final Thread thread = new Thread() {
 			@Override
 			public void run() {
-				// TODO lookup email from Google Glass account
-				completePayment(recipient.email, "lnanek@gmail.com", recipient.amount);
+				completePayment(recipient.email, username, recipient.amount);
 			}
 		};
 		thread.start();

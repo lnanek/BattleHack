@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -330,11 +331,17 @@ public class PreapprovalServlet extends HttpServlet {
 	
 	private static void addPreapproval(final String email, final String key) {
 		
-
         try {
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
             
+            // Remove any previous pre-approval key for this user.
+            String deleteSQL = "delete from approvals where email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(deleteSQL);
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+            
+            // Add a new one.
             PreparedStatement prep = conn.prepareStatement("insert into approvals values (?,?);");
 
             prep.setString(1, email);

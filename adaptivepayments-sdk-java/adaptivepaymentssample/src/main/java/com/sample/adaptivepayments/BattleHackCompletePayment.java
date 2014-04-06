@@ -249,6 +249,10 @@ public class BattleHackCompletePayment extends HttpServlet {
 									+ resp.getPayKey() + "</a>");
 					session.setAttribute("map", map);
 					response.sendRedirect("Response.jsp");
+					
+					updateStatus(receiverEmail);
+					
+					
 				} else {
 					session.setAttribute("Error", resp.getError());
 					response.sendRedirect("Error.jsp");
@@ -308,6 +312,31 @@ public class BattleHackCompletePayment extends HttpServlet {
         } 			
 	
 	
+	}
+	
+
+	private static void updateStatus(final String email) {
+		
+        try {
+            Class.forName("org.hsqldb.jdbcDriver");
+            Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
+            
+            String updateSql = "update people set status = 'PAID' where email = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(updateSql);
+            preparedStatement.setString(1, email);
+            preparedStatement.executeUpdate();
+            
+
+            conn.setAutoCommit(true);
+
+            conn.close();
+        } catch (SQLException ex) {
+        	throw new RuntimeException(ex);
+        } catch (ClassNotFoundException ex) {
+        	throw new RuntimeException(ex);
+        }		
+		
+		
 	}
 
 }

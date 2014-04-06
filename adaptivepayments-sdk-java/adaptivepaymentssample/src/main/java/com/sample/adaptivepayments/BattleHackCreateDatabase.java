@@ -44,6 +44,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// TODO setup DB automatically only if needed and on app start
+
+// TODO use external DB so can have multiple web workers
+
 public class BattleHackCreateDatabase extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

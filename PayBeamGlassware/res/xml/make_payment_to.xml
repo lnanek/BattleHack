@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<trigger keyword="@string/make_payment_to_voice_trigger">
+    <constraints
+        microphone="true"
+        network="true" />
+    <input prompt="@string/make_payment_to_prompt" />
+</trigger>
