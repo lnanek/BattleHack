@@ -4,7 +4,7 @@
     <string name="app_name">PayBeam</string>
     
     <string name="make_a_payment_voice_trigger">send cash</string>
-    <string name="make_payment_to_voice_trigger">send cash to</string>
+    <string name="make_payment_to_voice_trigger">send cash to contact</string>
     <string name="make_payment_to_prompt">Pay who and how much?</string>
    
 </resources>

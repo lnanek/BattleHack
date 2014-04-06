@@ -146,6 +146,7 @@ public class MakePaymentActivity extends Activity {
     public void onPause() {
         super.onPause();
         screenWaker.onPause();
+        finish();
     }
 
 	public void readReceipients() {

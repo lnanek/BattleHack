@@ -110,6 +110,7 @@ public class MakePaymentToActivity extends Activity {
     public void onPause() {
         super.onPause();
         screenWaker.onPause();
+        finish();
     }
 
 
