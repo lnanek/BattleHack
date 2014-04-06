@@ -36,10 +36,21 @@
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/make_a_payment" />
             
+        </activity>
+        
+        <activity
+            android:name="name.nanek.paybeam.MakePaymentToActivity"
+            android:label="@string/app_name" >
+            
+            <intent-filter>
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+            </intent-filter>
+            
             <meta-data
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/make_payment_to" />
-        </activity>
+        </activity>        
+        
     </application>
 
 </manifest>

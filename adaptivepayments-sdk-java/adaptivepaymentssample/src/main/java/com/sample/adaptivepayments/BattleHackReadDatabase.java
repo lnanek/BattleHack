@@ -62,7 +62,7 @@ public class BattleHackReadDatabase extends HttpServlet {
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
             Statement stat = conn.createStatement();
-            ResultSet rs = stat.executeQuery("select * from people;");
+            ResultSet rs = stat.executeQuery("select * from people where status = 'PENDING';");
             
             final List<Map<String,String>> results = new LinkedList<Map<String, String>>();
             while (rs.next()) {

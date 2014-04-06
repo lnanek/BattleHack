@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="make_a_payment_voice_trigger">make a payment</string>
-    <string name="make_payment_to_voice_trigger">make payment to</string>
-    <string name="make_payment_to_prompt">Pay who and how much?</string>
-    
     <string name="app_name">PayBeam</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
+    
+    <string name="make_a_payment_voice_trigger">send cash</string>
+    <string name="make_payment_to_voice_trigger">send cash to</string>
+    <string name="make_payment_to_prompt">Pay who and how much?</string>
+   
 </resources>

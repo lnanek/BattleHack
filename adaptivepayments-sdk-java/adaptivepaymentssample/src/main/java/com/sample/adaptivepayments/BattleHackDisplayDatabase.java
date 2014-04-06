@@ -67,7 +67,7 @@ public class BattleHackDisplayDatabase extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Pay Beam - Instant PayPal Payments on Google Glass</h1>");
             
-            out.println("<h2>People waiting for payments:</h2>");
+            out.println("<h2>Recipients:</h2>");
             
             Class.forName("org.hsqldb.jdbcDriver");
             Connection conn = DriverManager.getConnection("jdbc:hsqldb:test.db");
@@ -77,9 +77,22 @@ public class BattleHackDisplayDatabase extends HttpServlet {
             while (rs.next()) {
                 out.println("email = " + rs.getString("email") + "<br/>");
                 out.println("amount = " + rs.getString("amount") + "<br/>");
+                out.println("status = " + rs.getString("status") + "<br/>");
             }
             rs.close();
-                                
+
+            out.println("<h2>Approvals:</h2>");
+            
+            Statement stat2 = conn.createStatement();
+            ResultSet rs2 = stat2.executeQuery("select * from approvals;");
+            
+            while (rs2.next()) {
+                out.println("email = " + rs2.getString("email") + "<br/>");
+                out.println("preapprovalKey = " + rs2.getString("preapprovalKey") + "<br/>");
+            }
+            rs2.close();
+            
+           
             out.println("</body>");
             out.println("</html>");
 

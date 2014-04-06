@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,19 +20,26 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StrictMode;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
+import com.google.android.glass.app.Card;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 public class MakePaymentActivity extends Activity {
+	
+	// TODO more icons and sound effects
+	
+	private ScreenWaker screenWaker;
 	
 	private static final int MSG_ID_GOT_RECIPIENTS = 1;
 	
@@ -49,66 +57,75 @@ public class MakePaymentActivity extends Activity {
 	
 	private static final String SUBMIT_URL = SERVER + "BattleHackCompletePayment";
 	
-	private TextView text;
+    private AudioManager mAudioManager;
 
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			Log.i(LOG_TAG, "handleMessage");
 
-			if ( null != progress && progress.isShowing() ) {
-				progress.hide();
-			}
+			//if ( null != progress && progress.isShowing() ) {
+			//	progress.hide();
+			//}
 			
 			if ( MSG_ID_GOT_RECIPIENTS == msg.what ) {
 
 				Log.i(LOG_TAG, "updating recipients");
 				
 				recipients = (List<Recipient>) msg.obj;
+				if ( null == recipients ) {
+					displayTextCard("No recipients found.");
+					return;
+				}
 				
-				text.setText(recipients.toString());
-				
+				//displayTextCard(recipients.toString());
+
+				displayTextCard("Found " + recipients.size() + " recipients.");
+
 				invalidateOptionsMenu();
-				
 				openOptionsMenu();
 				
 				return;
 
-			} else {
+			} else if ( MSG_ID_ERROR == msg.what ) {
 
 				Log.i(LOG_TAG, "updating text");
 
 				final String message = (String) msg.obj;
-				text.setText(message);
+				if ( null != message ) {
+					displayTextCard(message);
+				}
 			}
 		}
 	};
 
 	private List<Recipient> recipients = new LinkedList<Recipient>();
 
-	private ProgressDialog progress;
+	//private ProgressDialog progress;
+	
+	private void displayTextCard(final String message) {
+    	final Card card = new Card(this);
+    	card.setText(message);
+    	setContentView(card.toView());   		
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
 		Log.i(LOG_TAG, "onCreate");
-
 		super.onCreate(savedInstanceState);
+        screenWaker = new ScreenWaker(this);        
+
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		
-		// TODO read voice prompt input, search address book for user, do payment to them
-
-		//StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		//StrictMode.setThreadPolicy(policy);
-
-		// TODO use card views for more Glass like experience
-		setContentView(R.layout.activity_make_payment);
-
-		text = (TextView) findViewById(R.id.text);
-		text.setText("Downloading...");
-
-		progress = new ProgressDialog(this);
-		progress.show();
-
+		if (!ConnectionUtil.isOnline(this)) {
+			displayTextCard("Please connect to internet.");
+			return;
+		}
+		
+		// Otherwise download registered recipients and offer swipe list.
+		displayTextCard("Searching for recipients...");
+		//progress = new ProgressDialog(this);
+		//progress.show();
 		final Thread thread = new Thread() {
 			@Override
 			public void run() {
@@ -117,6 +134,19 @@ public class MakePaymentActivity extends Activity {
 		};
 		thread.start();
 	}
+	
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        screenWaker.onResume();
+    }
+   
+    @Override
+    public void onPause() {
+        super.onPause();
+        screenWaker.onPause();
+    }
 
 	public void readReceipients() {
 
@@ -154,16 +184,19 @@ public class MakePaymentActivity extends Activity {
 
 
 			} else {
-				final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to download file");
+				final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+						"Error searching (" + statusCode + "). Please try again later.");
 				handler.sendMessage(message);
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to download file: " + e.getClass().getName());
+			final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+					"Error searching (" + e.getClass().getSimpleName() + "). Please try again later.");
 			handler.sendMessage(message);
 		} catch (IOException e) {
 			e.printStackTrace();
-			final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to download file: " + e.getClass().getName());
+			final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+					"Error searching (" + e.getClass().getSimpleName() + "). Please try again later.");
 			handler.sendMessage(message);
 		}
 	}
@@ -189,22 +222,26 @@ public class MakePaymentActivity extends Activity {
 
 			if (statusCode == 200) {
 
-				final Message message = handler.obtainMessage(MSG_ID_ERROR, "Payment complete");
+				final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+						"Payment complete!");
 				handler.sendMessage(message);
 
 				// TODO complete sound, OK icon
 
 			} else {
-				final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to complete");
+				final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+						"Error paying (" + statusCode + "). Please try again later.");
 				handler.sendMessage(message);
 			}
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to complete: " + e.getClass().getName());
+			final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+					"Error paying (" + e.getClass().getSimpleName() + "). Please try again later.");
 			handler.sendMessage(message);
 		} catch (IOException e) {
 			e.printStackTrace();
-			final Message message = handler.obtainMessage(MSG_ID_ERROR, "Failed to complete: " + e.getClass().getName());
+			final Message message = handler.obtainMessage(MSG_ID_ERROR, 
+					"Error paying (" + e.getClass().getSimpleName() + "). Please try again later.");
 			handler.sendMessage(message);
 		}
 	}
@@ -227,9 +264,9 @@ public class MakePaymentActivity extends Activity {
 			final Recipient recipient = recipients.get(index);
 			final int menuItemId = index;
 			
-			final String menuTitle = recipient.email + " - $" + recipient.amount;
-			menu.add(0, menuItemId, 0, menuTitle);	
-			
+			final String menuTitle = "$" + recipient.amount + " " + recipient.email;
+			final MenuItem item = menu.add(0, menuItemId, 0, menuTitle);	
+			item.setIcon(R.drawable.ic_menu_send);
 
 			Log.i(LOG_TAG, "adding menu item: " + menuTitle);
 		}
@@ -241,14 +278,17 @@ public class MakePaymentActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		Log.i(LOG_TAG, "onOptionsItemSelected");
+		mAudioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
 		
 		final Recipient recipient = recipients.get(item.getItemId());
-		text.setText("Selected = " + recipient.email);
+		displayTextCard("Paying " + recipient.email + " $" + recipient.amount + "...");
 		
-		//final String username = DeviceEmail.get(this);
-		final String username = "lnanek@gmail.com";
+		final String username = DeviceEmail.get(this);
+		//final String username = "lnanek@gmail.com";
 		
-		progress.show();
+		//progress.show();
+		closeOptionsMenu();
+		
 		final Thread thread = new Thread() {
 			@Override
 			public void run() {

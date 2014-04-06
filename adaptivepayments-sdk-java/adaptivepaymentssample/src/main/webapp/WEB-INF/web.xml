@@ -37,6 +37,16 @@
 	</servlet-mapping>
 	
 	
+	<servlet>
+		<description></description>
+		<display-name>BattleHackPaymentStatus</display-name>
+		<servlet-name>BattleHackPaymentStatus</servlet-name>
+		<servlet-class>com.sample.adaptivepayments.BattleHackPaymentStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BattleHackPaymentStatus</servlet-name>
+		<url-pattern>/BattleHackPaymentStatus</url-pattern>
+	</servlet-mapping>
 	
 	<servlet>
 		<description></description>
@@ -75,6 +85,17 @@
 	</servlet-mapping>		
 	
 	
+	
+	<servlet>
+		<description></description>
+		<display-name>BattleHackDisplayDatabase</display-name>
+		<servlet-name>BattleHackDisplayDatabase</servlet-name>
+		<servlet-class>com.sample.adaptivepayments.BattleHackDisplayDatabase</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BattleHackDisplayDatabase</servlet-name>
+		<url-pattern>/BattleHackDisplayDatabase</url-pattern>
+	</servlet-mapping>		
 	
 	
 	<servlet>

@@ -84,6 +84,7 @@ public class BattleHackRequestPayment extends HttpServlet {
         	throw new RuntimeException(ex);
         }
 
+        // TODO get DB row ID and redirect to payment status page
 
         out.println("Added.");
         out.close();
