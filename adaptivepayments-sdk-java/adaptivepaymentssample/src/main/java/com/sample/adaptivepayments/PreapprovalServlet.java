@@ -279,22 +279,34 @@ public class PreapprovalServlet extends HttpServlet {
 					map.put("Preapproval Key", resp.getPreapprovalKey());
 					
 					
-					// TODO auto-redirect to PayPal for approval
+					final String redirectUrl = 
+							"https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-preapproval&preapprovalkey="
+							+ resp.getPreapprovalKey();
 					
+
+					/* Old code to show the PayPal response before redirecting to it for auth.
 					map.put("Redirect URL",
 							"<a href=https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_ap-preapproval&preapprovalkey="
 									+ resp.getPreapprovalKey()
 									+ ">Redirect to paypal</a>");
 					session.setAttribute("map", map);
 					response.sendRedirect("Response.jsp");
+					*/
 					
+
 					
+					// Save preapprove key to DB
 					final String reqEmail = req.getSenderEmail();
 					final String reqSenderEmail = null != req.getSender() ? req.getSender().getEmail() : null;
 					final String dbEmail = null != reqSenderEmail && !"".equals(reqSenderEmail) ? 
 							reqSenderEmail : reqEmail;
 					
+					
 					addPreapproval(dbEmail, resp.getPreapprovalKey());
+					
+					
+					// Redirect to PayPal for confirmation.
+					response.sendRedirect(redirectUrl);
 					
 					
 				} else {
